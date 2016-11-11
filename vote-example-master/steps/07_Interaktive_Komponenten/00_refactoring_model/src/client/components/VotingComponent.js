@@ -4,7 +4,9 @@ import ChoiceBar from './ChoiceBar.js';
 export default class VotingComponent extends React.Component {
   render() {
     const { vote } = this.props;
-    const totalVotes = vote.choices.reduce((prev, curr) => prev + curr.count, 0);
+    const totalVotes = vote.choices.reduce((prev, curr) => {
+      prev + curr.count
+    }, 0);
     return (
       <div className="Row VotingRow Spacer">
         <div className="Head">
@@ -28,5 +30,3 @@ export default class VotingComponent extends React.Component {
 VotingComponent.propTypes = {
   vote: React.PropTypes.object.isRequired
 };
-
-

@@ -1,4 +1,5 @@
 import React from 'react';
+import ChoiceBar from './ChoiceBar'
 
 // Could be pure function component, but later on we will have
 // state inside this component, so start with class rather than
@@ -13,6 +14,9 @@ export default class VotingComponent extends React.Component {
             <div className="Badge">{vote.totalVotes} Votes</div>
           </h1>
           <div className="Description Emphasis">{vote.description}</div>
+          {vote.choices.map(choice =>(
+            <ChoiceBar key={choice.id} {...choice}/>
+          ))}
         </div>
       </div>
     );
@@ -22,5 +26,3 @@ export default class VotingComponent extends React.Component {
 VotingComponent.propTypes = {
   vote: React.PropTypes.object.isRequired
 };
-
-
