@@ -117,7 +117,6 @@ export default class VoteComposer extends React.Component {
     return (
       <div className="Row VotesRow Spacer" onClick={this.activateIfNeeded}>
         <h1 className="Title"><span className="Emphasis">What do <b>you</b> want to know ?</span>
-
           <div className="Badge">Add Voting</div>
         </h1>
         <p>Click here to leave your own question.</p>
