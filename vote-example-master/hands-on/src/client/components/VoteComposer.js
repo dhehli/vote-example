@@ -10,7 +10,6 @@ function emptyChoice() {
 
 function emptyVote() {
   return {
-    id:            `vote_${Date.now()}`,
     title:         '',
     description:   '',
     formCompleted: false,
@@ -33,14 +32,14 @@ export default class VoteComposer extends React.Component {
   }
 
   close() {
-    const { onDeactivate } = this.props;
+    const {onDeactivate} = this.props;
     this.setState(emptyVote());
     onDeactivate();
   }
 
   save() {
-    const { onSave } = this.props;
-    const { vote } = this.state;
+    const {onSave} = this.props;
+    const {vote} = this.state;
     const newVote = {
       ...vote,
       choices: vote.choices.slice(0, -1)
@@ -71,10 +70,7 @@ export default class VoteComposer extends React.Component {
   }
 
   onChoiceChange(choiceIx, title) {
-    console.log(choiceIx, title)
-
     const { vote } = this.state;
-    const test = this.state;
     const choices = vote.choices;
     const choice = choices[choiceIx];
 
@@ -117,6 +113,7 @@ export default class VoteComposer extends React.Component {
     return (
       <div className="Row VotesRow Spacer" onClick={this.activateIfNeeded}>
         <h1 className="Title"><span className="Emphasis">What do <b>you</b> want to know ?</span>
+
           <div className="Badge">Add Voting</div>
         </h1>
         <p>Click here to leave your own question.</p>
@@ -182,10 +179,3 @@ export default class VoteComposer extends React.Component {
     return this.renderActiveForm();
   }
 }
-
-VoteComposer.propTypes = {
-  active:       React.PropTypes.bool,
-  onSave:       React.PropTypes.func.isRequired,
-  onActivate:   React.PropTypes.func.isRequired,
-  onDeactivate: React.PropTypes.func.isRequired
-};

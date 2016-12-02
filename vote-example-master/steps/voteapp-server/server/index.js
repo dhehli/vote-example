@@ -1,7 +1,7 @@
 require('babel-register');
 
 const VoteApp = require('./VoteApp').default;
-const useMongoDb = process.env.USE_MONGODB;
+const useMongoDb = true;
 
 const Database = useMongoDb ? require('./db/MongoDbVoteDatabase').default : require('./db/InMemoryVoteDatabase').default;
 

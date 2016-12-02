@@ -1,13 +1,14 @@
 import React from 'react';
 import VoteList from './VoteList';
 import VoteComposer from './VoteComposer';
+import {fetchJson, sendJson} from '../backend/Backend';
 
 export default class VoteController extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
-      allVotes: props.allVotes
+      allVotes: []
     };
 
     this.setCurrentVote = this.setCurrentVote.bind(this);
@@ -17,31 +18,39 @@ export default class VoteController extends React.Component {
     this.deactivateVoteComposer = this.deactivateVoteComposer.bind(this);
   }
 
-  setCurrentVote(vote) {
-    const { composerActive } = this.state;
-    this.setState({currentVoteId: vote && !composerActive ? vote.id : null});
+  componentDidMount() {
+    fetchJson('/api/votes').then(allVotes => {
+      console.log(allVotes)
+      this.setState({
+        allVotes
+      });
+    });
   }
 
-  registerChoice(vote, choice) {
-    const newVote = {
-      ...vote,
-      choices: vote.choices.map((c) => c.id !== choice.id ? c : {...c, count: c.count + 1})
-    };
-    return newVote;
+  setCurrentVote(vote) {
+    this.setState({currentVoteId: vote && !this.state.composerActive ? vote.id : null});
   }
 
   // from VotingComponent
   registerVote(vote, choice) {
-    const { allVotes } = this.state;
-    const newVotes = allVotes.map((v)=>v.id !== vote.id ? v : this.registerChoice(v, choice));
-    this.setState({
-      allVotes: newVotes
+    sendJson('put', `/api/votes/${vote.id}/choices/${choice.id}/vote`, {}).then(updatedVote => {
+      // make sure our local copy contains refreshed version of the received vote
+      const newAllVotes = this.state.allVotes.map(vote => vote.id === updatedVote.id ? updatedVote : vote);
+      this.setState({allVotes: newAllVotes});
+
+      // make sure received vote is also the current vote
+      this.setCurrentVote(updatedVote);
     });
+
   }
 
-  addVote(vote) {
-    const { allVotes } = this.state;
-    this.setState({allVotes: [...allVotes, vote]});
+  addVote(newVote) {
+    sendJson('post', '/api/votes', newVote)
+      .then(receivedVote => {
+        this.setState({
+          allVotes: [...this.state.allVotes, receivedVote]
+        });
+      });
   }
 
   activateVoteComposer() {
@@ -76,6 +85,3 @@ export default class VoteController extends React.Component {
     );
   }
 }
-VoteController.propTypes = {
-  allVotes: React.PropTypes.array.isRequired
-};
