@@ -6,6 +6,7 @@ export default class LoginController extends React.Component {
   static requireAuth(nextState, replaceState) {
     if (!loggedIn) {
       const redirect = nextState.location.pathname;
+      console.log(redirect)
       replaceState(null, `/login${redirect}`);
     }
   }

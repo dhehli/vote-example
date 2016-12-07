@@ -5,6 +5,7 @@ import React from 'react';
 function Greeting(props, context) {
   return <b>Welcome {context.model.user}!</b>
 }
+
 Greeting.contextTypes = {
   model: React.PropTypes.object.isRequired
 };
